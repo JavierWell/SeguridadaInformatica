@@ -1,23 +1,47 @@
-# Keylogger Python
+KEY LOGGER 
+======
 
-Este proyecto contiene un keylogger básico implementado en Python. Utiliza la biblioteca `pynput` para capturar eventos del teclado y registrar las teclas presionadas.
+Descripción
+------------
+Este proyecto implementa un keylogger básico en Python que captura la entrada del teclado y la guarda en un archivo de registro en intervalos seleccionados por el usuario.
 
-## Archivos del Proyecto
+Librerías Utilizadas
+--------------------
+### pynput
+- **Descripción**: La librería `pynput` permite controlar y monitorizar entradas del teclado y el ratón en Python.
+- **Uso en el Proyecto**:
+  - `pynput.keyboard.Listener` se utiliza para escuchar eventos de teclado, permitiendo capturar cada tecla presionada por el usuario.
 
-### 1. `keyloggerV2.py`
+### threading
+- **Descripción**: El módulo `threading` proporciona herramientas para trabajar con múltiples hilos (threads) en Python.
+- **Uso en el Proyecto**:
+  - `threading.Timer` se utiliza para configurar un temporizador que ejecuta periódicamente la función de reporte del keylogger, permitiendo guardar el log en el archivo en intervalos regulares.
 
-Contiene la definición de la clase `Keylogger`. Implementa la lógica para capturar teclas, registrar las teclas presionadas en una variable y reportarlas periódicamente.
+Archivo `keyloggerV3.py`
+------------------------
+Este archivo contiene la implementación de la clase `Keylogger`.
 
-### 2. `zlogger.py`
+### Clase `Keylogger`
 
-Ejecuta el keylogger instanciando la clase `Keylogger` desde `keyloggerV2.py` y comienza a capturar y reportar teclas presionadas.
+- **Constructor `__init__(self, intervalo, archivo_log)`**:
+  - `intervalo`: Intervalo en segundos para reportar el log (e.g., 60 segundos).
+  - `archivo_log`: Ruta del archivo donde se guardará el log de teclas (e.g., `"C:\\keylogger_files\\log_teclas.txt"`).
 
-## Requisitos
+- **Métodos**:
+  - `append_to_log(self, string)`: Agrega texto al log.
+  - `process_key_press(self, key)`: Maneja las teclas presionadas y agrega su representación al log.
+  - `report(self)`: Guarda el contenido del log en el archivo y reinicia el log. Se llama a intervalos regulares.
+  - `start(self)`: Inicia el escuchador de teclado y comienza el proceso de reporte.
 
-- Python 3.x
-- Biblioteca `pynput`
+Archivo `zlogger.py`
+--------------------
+Este archivo es el script principal que utiliza la clase `Keylogger` para capturar y registrar la entrada del teclado.
 
-Puedes instalar la biblioteca `pynput` usando pip:
+### Uso de `Keylogger`
 
-```bash
-pip install pynput
+```python
+import keyloggerV3  
+# Crea una instancia del Keylogger con el intervalo y el archivo de log
+my_keylogger = keyloggerV3.Keylogger(intervalo=5, archivo_log=r"C:\keylogger_files\log_teclas.txt")
+# Iniciar el keylogger
+my_keylogger.start()
